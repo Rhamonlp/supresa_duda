@@ -12,15 +12,16 @@ canvas{display:block;margin:8px auto;max-width:100%;background:var(--floor);imag
 .pad button{height:56px;font-size:1.2rem;border-radius:10px;border:1px solid var(--fg);background:transparent;color:var(--fg);touch-action:none}
 .pad button.on{background:var(--fg);color:var(--bg)}
 p{font-size:.85rem;opacity:.8;margin:4px}
+#outfits{display:flex;gap:10px;justify-content:center;margin:10px}#outfits button{width:44px;height:44px;border-radius:50%;border:3px solid transparent;cursor:pointer}#outfits button.on{border-color:var(--fg)}
 </style></head><body>
 <h1>Duda e Amon – use W A S D para andar</h1>
 <canvas id="c" width="640" height="400"></canvas>
 <div class="pad"><span></span><button data-k="w">W</button><span></span><button data-k="a">A</button><button data-k="s">S</button><button data-k="d">D</button></div>
-<p>Chegue perto do Amon, no canto superior direito.</p>
+<div id="outfits"></div><p id="oname"></p><p>Chegue perto do Amon, no canto superior direito. As teclas 1 a 5 também trocam a roupa.</p>
 <script>
 const duda=new Image(),amon=new Image();
 duda.src="data:image/png;base64,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";amon.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABACAYAAADS1n9/AAAAAXNSR0IArs4c6QAAAy5JREFUeJztnD9v2kAYxh+qDqwdokiRKJb5BpGVLB0Y2zlDpEiMzdaxO1+iC2ukSh0607FrIotvgEWIVKnfwJu7+KjtGHxn7vVx8PyWgH3huffufe8fvAYIIYQQQgghhBBCCCGEEHLM9EwKh0GU7bqfrGKjzyNmSLS/9j+EQZSN+v2dZZZpuldldOqw6760A7rUl2p/rUI64nWVsdUgquFNGgCw2yEuA0Cy/d9KiNvERL9YruoMXdShVCaIMhtOIN3+b6Q+eNTvNw6ZktjSdx0AbdG1X8wBTh3XAaBL4xSgUEPqrmgoDru2o8a1vmuk7G90gGQV95B78nx6iU/Txday8+klAOwsY4prfYUrB5S2X2sESFZxLwyi7GwUYT7dXu5sFOWvFlZ3AS71D8EBJe3XngIUyrj44b50PZrMACw216X2xC70XQdAEdv2GztAVbjpum1c67sOANv2Gx8FNwlFk5mY8S71dbQPoQ6m2saVVFub+gjo7jjWhb7rAFB1AOzZbzQFhEGUXV+9BwC8+/C5dO/66pd6aeUE7BD1k1XciyZw6oC27Tf6MkiJK77/+AkAuLu9KV1/fFpbbwjX+tU6KG2FqkMX2gob9muNAMWhL5rMUK1IUfh/OXuR6Fpf1aGoe3d7U9sBeRnr2lL2G+8CTpFDcEAptA+C1NwHAH/+hgCA8fhrfiXM/65F5kLX+q6RtL/VLmAwHAMAXp5/AwCK77vYBbjQL36xo/SqqPoAcg5o2/5WU8DFeZIL1r+XxoW+atgwiDKl9/i0BrCZ9/Hy3M3I47r9CSGEEEIIIYQQQgghhBDiD3w+wInj1fMBiH28eD4AkaMxO9jX9Giix9E+H4DoYdUBlmlq9ckcRB5rvwpepumr7FiuAQ6fvR1gW8Sz8/1A+wERdQvBYtQD5fRo4getRgAV9V2lZBM5tBNDUFjRs+OPB+0RoPi7+G1ljjEr59hp1VF1mapSWbFEFuNzgGrnF7NjePDjH60PglTHE7/Z6yTw25ePiB/u6QweY7wNzOf5V0M91wB+0vokcDAcb1b9g+G4lBpN/KF1xFbz1Bn9frLXGuDiPGHne84/ktGLyhwn7tAAAAAASUVORK5CYII=";
-let loaded=0;duda.onload=amon.onload=()=>{if(++loaded==2)loop()};
+let loaded=0;duda.onload=amon.onload=()=>{if(++loaded==2){buildSheets();loop()}};
 const cv=document.getElementById("c"),ctx=cv.getContext("2d");
 const COLS=4,SCALE=4,SPEED=2.2,ROW={down:0,idle:1,right:2,up:3,left:4};
 const HOME={x:570,y:92},NOTICE=210,START=120,GAP=54;
@@ -66,6 +67,23 @@ R("rgba(40,90,50,.3)",378,166,60,6);R("#8b552e",380,136,56,8);R("#a46a3c",380,15
 for(let x=0;x<640;x+=16){R("#fff6e8",x+2,372,8,26);R("#fff6e8",x+4,368,4,4)}
 R("#e3d6bb",0,378,640,4);R("#e3d6bb",0,388,640,4);
 })();
+const OUT=[{n:"Original",s:"#ac3232"},{n:"Camiseta azul",s:"#3d6fb4",base:"#3d6fb4",acc:"#2a4f8a",lt:"#cfe3ff",legs:["#3b3b5c"]},{n:"Vestido amarelo",s:"#e8b93c",base:"#e8b93c",acc:"#d9822b",lt:"#fff3c4",legs:["#e8b93c"]},{n:"Moletom verde",s:"#4f9d57",base:"#4f9d57",acc:"#3a7a43",lt:"#b9e3b8",legs:["#3b4a6b","#3b4a6b"]},{n:"Vestido rosa",s:"#f08cb8",base:"#f08cb8",acc:"#c85a8c",lt:"#ffe0ee",legs:["#f08cb8"]}];
+const sheets=[];let cur=0;
+const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function buildSheets(){OUT.forEach((o,n)=>{const c=document.createElement("canvas");c.width=duda.width;c.height=duda.height;const g=c.getContext("2d");g.drawImage(duda,0,0);sheets[n]=c;if(!o.base)return;
+const d=g.getImageData(0,0,c.width,c.height),p=d.data,W=c.width;
+for(let fy=0;fy<5;fy++)for(let fx=0;fx<4;fx++){let last=0;const ox=fx*32,oy=fy*32;
+ for(let y=0;y<32;y++)for(let x=0;x<32;x++){const i=((oy+y)*W+ox+x)*4;if(p[i+3]&&p[i]==0x45&&p[i+1]==0x28&&p[i+2]==0x3c)last=y}
+ for(let y=last+1;y<32;y++)for(let x=0;x<32;x++){const i=((oy+y)*W+ox+x)*4;if(!p[i+3])continue;const k=p[i]<<16|p[i+1]<<8|p[i+2];let col=null;
+  if(k==0x8f563b||k==0x663931){col=y<=last+5?o.base:o.legs[y-last-6]}
+  else if(k==0xac3232)col=o.acc;else if(k==0xffffff)col=o.lt;
+  if(col){const r=rgb(col);p[i]=r[0];p[i+1]=r[1];p[i+2]=r[2]}}}
+g.putImageData(d,0,0)})}
+const box=document.getElementById("outfits"),oname=document.getElementById("oname");
+function pick(n){cur=n;[...box.children].forEach((b,i)=>b.classList.toggle("on",i==n));oname.textContent="Roupa: "+OUT[n].n}
+OUT.forEach((o,n)=>{const b=document.createElement("button");b.style.background=o.s;b.title=o.n;b.setAttribute("aria-label",o.n);b.onclick=()=>{pick(n);b.blur()};box.appendChild(b)});
+pick(0);
+addEventListener("keydown",e=>{const n=+e.key;if(n>=1&&n<=OUT.length)pick(n-1)});
 const blocked=(px,py)=>{const fx=px,fy=py+56;return (((fx-120)/90)**2+((fy-95)/54)**2<1)||(fx>366&&fx<450&&fy>130&&fy<170)};
 let AC;function chime(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();[659,784,988,1318].forEach((fq,i)=>{const o=AC.createOscillator(),gn=AC.createGain(),s=AC.currentTime+i*.16;o.type="triangle";o.frequency.value=fq;gn.gain.setValueAtTime(.0001,s);gn.gain.exponentialRampToValueAtTime(.12,s+.03);gn.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(gn);gn.connect(AC.destination);o.start(s);o.stop(s+.55)})}catch(e){}}
 const bf=[{cx:260,cy:180,r:50,ph:0,c:"#ffb14e"},{cx:160,cy:300,r:60,ph:2,c:"#7ec8ff"},{cx:400,cy:300,r:70,ph:4,c:"#ff9ad0"}];
@@ -104,7 +122,7 @@ const drawDuda=()=>{shadow(x,y);
   if(moving){row=ROW[dir];frame=Math.floor(t/8)%COLS}
   else if(turned){row=ROW[mode=="free"?(x<ax?"right":"left"):dir];frame=0}
   else{row=ROW.idle;frame=Math.floor(t/20)%COLS}
-  ctx.drawImage(duda,frame*fw,row*fh,fw,fh,Math.round(x-w/2),Math.round(y-h/2),w,h)};
+  ctx.drawImage(sheets[cur]||duda,frame*fw,row*fh,fw,fh,Math.round(x-w/2),Math.round(y-h/2),w,h)};
 const drawAmon=()=>{shadow(ax,ay);
   const aw=amon.width/4,ah=amon.height/2;
   ctx.save();ctx.translate(Math.round(ax),Math.round(ay));
