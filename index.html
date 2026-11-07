@@ -41,9 +41,10 @@ const HEART=["0110110","1111111","1111111","0111110","0011100","0001000"];
 function heart(cx,cy,sc){ctx.fillStyle="#e0485f";HEART.forEach((r,j)=>[...r].forEach((v,i)=>{if(v=="1")ctx.fillRect(Math.round(cx+(i-3.5)*sc),Math.round(cy+j*sc),sc,sc)}))}
 let seed=7;const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
 const bg=document.createElement("canvas");bg.width=640;bg.height=400;
-(function(){const g=bg.getContext("2d");
+const fgc=document.createElement("canvas");fgc.width=640;fgc.height=400;
+(function(){const g=bg.getContext("2d"),f=fgc.getContext("2d");
 const R=(c,a,b,w,h)=>{g.fillStyle=c;g.fillRect(a,b,w,h)};
-const blob=(cx,cy,r,c)=>{g.fillStyle=c;for(let i=-r;i<=r;i+=4)for(let j=-r;j<=r;j+=4)if(i*i+j*j<=r*r)g.fillRect(cx+i,cy+j,4,4)};
+const blob=(cx,cy,r,c,T=g)=>{T.fillStyle=c;for(let i=-r;i<=r;i+=4)for(let j=-r;j<=r;j+=4)if(i*i+j*j<=r*r)T.fillRect(cx+i,cy+j,4,4)};
 const ell=(cx,cy,rx,ry,c)=>{g.fillStyle=c;for(let i=-rx;i<=rx;i+=4)for(let j=-ry;j<=ry;j+=4)if((i/rx)**2+(j/ry)**2<=1)g.fillRect(cx+i,cy+j,4,4)};
 for(let i=0;i<20;i++)for(let j=0;j<13;j++)R((i+j)%2?"#7cc46a":"#86cc72",i*32,j*32,32,32);
 for(let n=0;n<120;n++){const a=Math.floor(rnd()*160)*4,b=Math.floor(rnd()*100)*4;R("#5fa95a",a,b,4,4);R("#5fa95a",a+4,b-4,4,8)}
@@ -57,7 +58,7 @@ blob(156,84,8,"#4f9d57");R("#f8a5c4",152,80,8,8);blob(92,108,8,"#4f9d57");
 const ok=(a,b)=>!segs.some(([x0,y0,w,h])=>a>x0-12&&a<x0+w+12&&b>y0-12&&b<y0+h+12)&&(((a-120)/84)**2+((b-95)/54)**2>1);
 const FC=["#ffffff","#ffd0e0","#fff1a0","#c9b6ff"];
 for(let n=0;n<90;n++){const a=Math.floor(rnd()*155)*4,b=Math.floor(rnd()*90)*4;if(!ok(a,b))continue;const c=FC[n%4];R("#4f9d57",a+2,b+4,2,4);R(c,a,b,6,2);R(c,a+2,b-2,2,6);R("#f2c14e",a+2,b,2,2)}
-const tree=(cx,cy,c1,c2,c3)=>{ell(cx,cy+30,34,10,"rgba(40,90,50,.35)");R("#7a5230",cx-6,cy,12,30);blob(cx-24,cy+4,24,c1);blob(cx+24,cy+4,24,c1);blob(cx,cy-8,36,c1);blob(cx+12,cy+10,16,c2);blob(cx-10,cy-20,16,c3)};
+const tree=(cx,cy,c1,c2,c3)=>{ell(cx,cy+30,34,10,"rgba(40,90,50,.35)");R("#7a5230",cx-6,cy,12,30);blob(cx-24,cy+4,24,c1,f);blob(cx+24,cy+4,24,c1,f);blob(cx,cy-8,36,c1,f);blob(cx+12,cy+10,16,c2,f);blob(cx-10,cy-20,16,c3,f)};
 tree(330,44,"#f2a7c3","#e58db0","#f8c8dc");tree(455,40,"#f2a7c3","#e58db0","#f8c8dc");
 tree(30,215,"#f2a7c3","#e58db0","#f8c8dc");tree(612,250,"#f2a7c3","#e58db0","#f8c8dc");
 tree(36,330,"#4f9d57","#3f8a49","#6bb86a");
@@ -65,6 +66,9 @@ R("rgba(40,90,50,.3)",378,166,60,6);R("#8b552e",380,136,56,8);R("#a46a3c",380,15
 for(let x=0;x<640;x+=16){R("#fff6e8",x+2,372,8,26);R("#fff6e8",x+4,368,4,4)}
 R("#e3d6bb",0,378,640,4);R("#e3d6bb",0,388,640,4);
 })();
+const blocked=(px,py)=>{const fx=px,fy=py+56;return (((fx-120)/90)**2+((fy-95)/54)**2<1)||(fx>366&&fx<450&&fy>130&&fy<170)};
+let AC;function chime(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();[659,784,988,1318].forEach((fq,i)=>{const o=AC.createOscillator(),gn=AC.createGain(),s=AC.currentTime+i*.16;o.type="triangle";o.frequency.value=fq;gn.gain.setValueAtTime(.0001,s);gn.gain.exponentialRampToValueAtTime(.12,s+.03);gn.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(gn);gn.connect(AC.destination);o.start(s);o.stop(s+.55)})}catch(e){}}
+const bf=[{cx:260,cy:180,r:50,ph:0,c:"#ffb14e"},{cx:160,cy:300,r:60,ph:2,c:"#7ec8ff"},{cx:400,cy:300,r:70,ph:4,c:"#ff9ad0"}];
 const petals=Array.from({length:28},()=>({x:Math.random()*640,y:Math.random()*400,v:.4+Math.random()*.5,ph:Math.random()*6}));
 function loop(){
 t++;const fw=duda.width/COLS,fh=duda.height/5,w=fw*SCALE,h=fh*SCALE;
@@ -73,7 +77,7 @@ if(mode=="free"){
   let dx=0,dy=0;for(const k of "wasd")if(keys[k]){dx+=D[k][1];dy+=D[k][2]}
   const last=order[order.length-1];if(last)dir=D[last][0];
   moving=!!(dx||dy);
-  if(moving){const n=Math.hypot(dx,dy);x+=dx/n*SPEED;y+=dy/n*SPEED}
+  if(moving){const n=Math.hypot(dx,dy),nx=x+dx/n*SPEED,ny=y+dy/n*SPEED;if(!blocked(nx,y))x=nx;if(!blocked(x,ny))y=ny}
   x=clamp(x,w/2,cv.width-w/2);y=clamp(y,h/2,cv.height-h/2);
   const dist=Math.hypot(x-ax,y-ay);
   if(dist>NOTICE+30)armed=true;
@@ -85,36 +89,39 @@ if(mode=="approach"){
   dir=s<0?"right":"left";moving=true;
   const p={x,y},q={x:ax,y:ay};const a=step(p,tD,SPEED),b=step(q,tA,SPEED);
   x=p.x;y=p.y;ax=q.x;ay=q.y;
-  if(a&&b){mode="kiss";timer=0}
+  if(a&&b){mode="kiss";timer=0;chime()}
 }else if(mode=="kiss"){
-  dir=s<0?"right":"left";if(++timer>360)mode="leave";
+  dir=s<0?"right":"left";if(++timer>420)mode="leave";
 }else if(mode=="leave"){
   const q={x:ax,y:ay};if(step(q,HOME,1.6)){mode="free";armed=false}ax=q.x;ay=q.y;
 }
 const dist=Math.hypot(x-ax,y-ay),turned=mode!="free"||dist<NOTICE;
 const faceLeft=mode=="free"?x<ax:s<0;
 ctx.imageSmoothingEnabled=false;ctx.drawImage(bg,0,0);
-const drawDuda=()=>{
+const shadow=(sx,sy)=>{ctx.fillStyle="rgba(30,70,40,.3)";ctx.beginPath();ctx.ellipse(Math.round(sx),Math.round(sy+58),22,7,0,0,7);ctx.fill()};
+const drawDuda=()=>{shadow(x,y);
   let row,frame;
   if(moving){row=ROW[dir];frame=Math.floor(t/8)%COLS}
   else if(turned){row=ROW[mode=="free"?(x<ax?"right":"left"):dir];frame=0}
   else{row=ROW.idle;frame=Math.floor(t/20)%COLS}
   ctx.drawImage(duda,frame*fw,row*fh,fw,fh,Math.round(x-w/2),Math.round(y-h/2),w,h)};
-const drawAmon=()=>{
+const drawAmon=()=>{shadow(ax,ay);
   const aw=amon.width/4,ah=amon.height/2;
   ctx.save();ctx.translate(Math.round(ax),Math.round(ay));
   if(turned){if(faceLeft)ctx.scale(-1,1);ctx.drawImage(amon,0,ah,aw,ah,-aw*SCALE/2,-ah*SCALE/2,aw*SCALE,ah*SCALE)}
   else ctx.drawImage(amon,(Math.floor(t/20)%4)*aw,0,aw,ah,-aw*SCALE/2,-ah*SCALE/2,aw*SCALE,ah*SCALE);
   ctx.restore()};
 (y<ay?[drawDuda,drawAmon]:[drawAmon,drawDuda]).forEach(f=>f());
+ctx.drawImage(fgc,0,0);
+bf.forEach(b=>{const bx=b.cx+Math.cos(t/55+b.ph)*b.r,by=b.cy+Math.sin(t/37+b.ph)*b.r*.5,fl=Math.sin(t/3+b.ph)>0?4:2;ctx.fillStyle=b.c;ctx.fillRect(Math.round(bx-fl),Math.round(by),fl,4);ctx.fillRect(Math.round(bx+1),Math.round(by),fl,4);ctx.fillStyle="#4a3b3b";ctx.fillRect(Math.round(bx),Math.round(by),2,4)});
 ctx.fillStyle="#f8bcd4";petals.forEach(p=>{p.y+=p.v;p.x+=.3+Math.sin(t/30+p.ph)*.4;if(p.y>404){p.y=-6;p.x=Math.random()*640}ctx.fillRect(Math.round(p.x),Math.round(p.y),4,3)});
-if(mode=="kiss"){const L=["Eu te amo, Duda!","Estou com saudades de você!"],n=Math.floor(timer/3);
+if(mode=="kiss"){const ph=timer>200,L=ph?["Eu também te amo, Amon!","Também senti muitas saudades!"]:["Eu te amo, Duda!","Estou com saudades de você!"],n=Math.floor((ph?timer-200:timer)/3);
 ctx.fillStyle="#4a3b3b";ctx.fillRect(116,286,408,72);ctx.fillStyle="#fffaf0";ctx.fillRect(120,290,400,64);
 ctx.fillStyle="#e0485f";ctx.fillRect(120,268,76,22);
-ctx.textBaseline="top";ctx.font="bold 15px monospace";ctx.fillStyle="#fffaf0";ctx.fillText("Amon",134,272);
+ctx.textBaseline="top";ctx.font="bold 15px monospace";ctx.fillStyle="#fffaf0";ctx.fillText(ph?"Duda":"Amon",134,272);
 ctx.font="bold 18px monospace";ctx.fillStyle="#4a3b3b";
 ctx.fillText(L[0].slice(0,n),136,302);ctx.fillText(L[1].slice(0,Math.max(0,n-L[0].length)),136,326);
-if(n>=L[0].length)heart(330,303,3)}
+if(n>=L[0].length)heart(136+ctx.measureText(L[0]).width+16,303,3)}
 if(mode=="kiss"){const mx=(x+ax)/2;for(let i=0;i<3;i++){const p=((timer+i*40)%120)/120;
   heart(mx+(i-1)*14+Math.sin(p*6+i)*6,ay-30-p*50,2+(i==1?1:0))}}
 requestAnimationFrame(loop)}
