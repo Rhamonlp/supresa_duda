@@ -12,12 +12,13 @@ canvas{display:block;margin:8px auto;max-width:100%;background:var(--floor);imag
 .pad button{height:56px;font-size:1.2rem;border-radius:10px;border:1px solid var(--fg);background:transparent;color:var(--fg);touch-action:none}
 .pad button.on{background:var(--fg);color:var(--bg)}
 p{font-size:.85rem;opacity:.8;margin:4px}
+#tod{margin:6px;padding:6px 16px;border-radius:999px;border:1px solid var(--fg);background:transparent;color:var(--fg);cursor:pointer;font-size:.9rem}
 #outfits{display:flex;gap:10px;justify-content:center;margin:10px}#outfits button{width:44px;height:44px;border-radius:50%;border:3px solid transparent;cursor:pointer}#outfits button.on{border-color:var(--fg)}
 </style></head><body>
 <h1>Duda e Amon – use W A S D para andar</h1>
 <canvas id="c" width="640" height="400"></canvas>
 <div class="pad"><span></span><button data-k="w">W</button><span></span><button data-k="a">A</button><button data-k="s">S</button><button data-k="d">D</button></div>
-<div id="outfits"></div><p id="oname"></p><p>Chegue perto do Amon, no canto superior direito. As teclas 1 a 5 também trocam a roupa.</p>
+<button id="tod"></button><div id="outfits"></div><p id="oname"></p><p>Shift corre, as setas também andam e a tecla T muda o horário.</p><p>Chegue perto do Amon, no canto superior direito. As teclas 1 a 5 também trocam a roupa.</p>
 <script>
 const duda=new Image(),amon=new Image();
 duda.src="data:image/png;base64,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";amon.src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABACAYAAADS1n9/AAAAAXNSR0IArs4c6QAAAy5JREFUeJztnD9v2kAYxh+qDqwdokiRKJb5BpGVLB0Y2zlDpEiMzdaxO1+iC2ukSh0607FrIotvgEWIVKnfwJu7+KjtGHxn7vVx8PyWgH3huffufe8fvAYIIYQQQgghhBBCCCGEEHLM9EwKh0GU7bqfrGKjzyNmSLS/9j+EQZSN+v2dZZZpuldldOqw6760A7rUl2p/rUI64nWVsdUgquFNGgCw2yEuA0Cy/d9KiNvERL9YruoMXdShVCaIMhtOIN3+b6Q+eNTvNw6ZktjSdx0AbdG1X8wBTh3XAaBL4xSgUEPqrmgoDru2o8a1vmuk7G90gGQV95B78nx6iU/Txday8+klAOwsY4prfYUrB5S2X2sESFZxLwyi7GwUYT7dXu5sFOWvFlZ3AS71D8EBJe3XngIUyrj44b50PZrMACw216X2xC70XQdAEdv2GztAVbjpum1c67sOANv2Gx8FNwlFk5mY8S71dbQPoQ6m2saVVFub+gjo7jjWhb7rAFB1AOzZbzQFhEGUXV+9BwC8+/C5dO/66pd6aeUE7BD1k1XciyZw6oC27Tf6MkiJK77/+AkAuLu9KV1/fFpbbwjX+tU6KG2FqkMX2gob9muNAMWhL5rMUK1IUfh/OXuR6Fpf1aGoe3d7U9sBeRnr2lL2G+8CTpFDcEAptA+C1NwHAH/+hgCA8fhrfiXM/65F5kLX+q6RtL/VLmAwHAMAXp5/AwCK77vYBbjQL36xo/SqqPoAcg5o2/5WU8DFeZIL1r+XxoW+atgwiDKl9/i0BrCZ9/Hy3M3I47r9CSGEEEIIIYQQQgghhBDiD3w+wInj1fMBiH28eD4AkaMxO9jX9Giix9E+H4DoYdUBlmlq9ckcRB5rvwpepumr7FiuAQ6fvR1gW8Sz8/1A+wERdQvBYtQD5fRo4getRgAV9V2lZBM5tBNDUFjRs+OPB+0RoPi7+G1ljjEr59hp1VF1mapSWbFEFuNzgGrnF7NjePDjH60PglTHE7/Z6yTw25ePiB/u6QweY7wNzOf5V0M91wB+0vokcDAcb1b9g+G4lBpN/KF1xFbz1Bn9frLXGuDiPGHne84/ktGLyhwn7tAAAAAASUVORK5CYII=";
@@ -29,8 +30,9 @@ const keys={},order=[];
 let x=200,y=300,dir="down",t=0,ax=HOME.x,ay=HOME.y,mode="free",timer=0,armed=true,s=-1,tD=null,tA=null;
 function press(k,on){if(!"wasd".includes(k))return;keys[k]=on;const i=order.indexOf(k);if(i>-1)order.splice(i,1);if(on)order.push(k);
 document.querySelectorAll(".pad button").forEach(b=>b.classList.toggle("on",!!keys[b.dataset.k]))}
-addEventListener("keydown",e=>{const k=e.key.toLowerCase();if("wasd".includes(k)){e.preventDefault();press(k,true)}});
-addEventListener("keyup",e=>press(e.key.toLowerCase(),false));
+const AR={arrowup:"w",arrowleft:"a",arrowdown:"s",arrowright:"d"};
+addEventListener("keydown",e=>{const k=AR[e.key.toLowerCase()]||e.key.toLowerCase();if(k.length==1&&"wasd".includes(k)){e.preventDefault();press(k,true)}});
+addEventListener("keyup",e=>press(AR[e.key.toLowerCase()]||e.key.toLowerCase(),false));
 addEventListener("blur",()=>"wasd".split("").forEach(k=>press(k,false)));
 document.querySelectorAll(".pad button").forEach(b=>{const k=b.dataset.k;
 b.addEventListener("pointerdown",e=>{e.preventDefault();press(k,true)});
@@ -84,6 +86,13 @@ function pick(n){cur=n;[...box.children].forEach((b,i)=>b.classList.toggle("on",
 OUT.forEach((o,n)=>{const b=document.createElement("button");b.style.background=o.s;b.title=o.n;b.setAttribute("aria-label",o.n);b.onclick=()=>{pick(n);b.blur()};box.appendChild(b)});
 pick(0);
 addEventListener("keydown",e=>{const n=+e.key;if(n>=1&&n<=OUT.length)pick(n-1)});
+let run=false,tod=0,kisses=0;const dust=[];
+addEventListener("keydown",e=>{run=e.shiftKey});addEventListener("keyup",e=>{run=e.shiftKey});
+const ff=Array.from({length:18},()=>({x:Math.random()*640,y:Math.random()*400,p:Math.random()*6,a:Math.random()*6}));
+const TN=["☀️ Dia","🌇 Pôr do sol","🌙 Noite"],todB=document.getElementById("tod");
+function setTod(n){tod=n%3;todB.textContent=TN[tod]}
+todB.onclick=()=>{setTod(tod+1);todB.blur()};setTod(0);
+addEventListener("keydown",e=>{if(e.key.toLowerCase()=="t")setTod(tod+1)});
 const blocked=(px,py)=>{const fx=px,fy=py+56;return (((fx-120)/90)**2+((fy-95)/54)**2<1)||(fx>366&&fx<450&&fy>130&&fy<170)};
 let AC;function chime(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume();[659,784,988,1318].forEach((fq,i)=>{const o=AC.createOscillator(),gn=AC.createGain(),s=AC.currentTime+i*.16;o.type="triangle";o.frequency.value=fq;gn.gain.setValueAtTime(.0001,s);gn.gain.exponentialRampToValueAtTime(.12,s+.03);gn.gain.exponentialRampToValueAtTime(.0001,s+.5);o.connect(gn);gn.connect(AC.destination);o.start(s);o.stop(s+.55)})}catch(e){}}
 const bf=[{cx:260,cy:180,r:50,ph:0,c:"#ffb14e"},{cx:160,cy:300,r:60,ph:2,c:"#7ec8ff"},{cx:400,cy:300,r:70,ph:4,c:"#ff9ad0"}];
@@ -95,7 +104,7 @@ if(mode=="free"){
   let dx=0,dy=0;for(const k of "wasd")if(keys[k]){dx+=D[k][1];dy+=D[k][2]}
   const last=order[order.length-1];if(last)dir=D[last][0];
   moving=!!(dx||dy);
-  if(moving){const n=Math.hypot(dx,dy),nx=x+dx/n*SPEED,ny=y+dy/n*SPEED;if(!blocked(nx,y))x=nx;if(!blocked(x,ny))y=ny}
+  if(moving){const n=Math.hypot(dx,dy),sp=SPEED*(run?1.7:1),nx=x+dx/n*sp,ny=y+dy/n*sp;if(!blocked(nx,y))x=nx;if(!blocked(x,ny))y=ny}
   x=clamp(x,w/2,cv.width-w/2);y=clamp(y,h/2,cv.height-h/2);
   const dist=Math.hypot(x-ax,y-ay);
   if(dist>NOTICE+30)armed=true;
@@ -107,7 +116,7 @@ if(mode=="approach"){
   dir=s<0?"right":"left";moving=true;
   const p={x,y},q={x:ax,y:ay};const a=step(p,tD,SPEED),b=step(q,tA,SPEED);
   x=p.x;y=p.y;ax=q.x;ay=q.y;
-  if(a&&b){mode="kiss";timer=0;chime()}
+  if(a&&b){mode="kiss";timer=0;chime();kisses++}
 }else if(mode=="kiss"){
   dir=s<0?"right":"left";if(++timer>420)mode="leave";
 }else if(mode=="leave"){
@@ -119,7 +128,7 @@ ctx.imageSmoothingEnabled=false;ctx.drawImage(bg,0,0);
 const shadow=(sx,sy)=>{ctx.fillStyle="rgba(30,70,40,.3)";ctx.beginPath();ctx.ellipse(Math.round(sx),Math.round(sy+58),22,7,0,0,7);ctx.fill()};
 const drawDuda=()=>{shadow(x,y);
   let row,frame;
-  if(moving){row=ROW[dir];frame=Math.floor(t/8)%COLS}
+  if(moving){row=ROW[dir];frame=Math.floor(t/(run&&mode=="free"?5:8))%COLS}
   else if(turned){row=ROW[mode=="free"?(x<ax?"right":"left"):dir];frame=0}
   else{row=ROW.idle;frame=Math.floor(t/20)%COLS}
   ctx.drawImage(sheets[cur]||duda,frame*fw,row*fh,fw,fh,Math.round(x-w/2),Math.round(y-h/2),w,h)};
@@ -129,10 +138,17 @@ const drawAmon=()=>{shadow(ax,ay);
   if(turned){if(faceLeft)ctx.scale(-1,1);ctx.drawImage(amon,0,ah,aw,ah,-aw*SCALE/2,-ah*SCALE/2,aw*SCALE,ah*SCALE)}
   else ctx.drawImage(amon,(Math.floor(t/20)%4)*aw,0,aw,ah,-aw*SCALE/2,-ah*SCALE/2,aw*SCALE,ah*SCALE);
   ctx.restore()};
+if(moving&&mode=="free"&&t%(run?4:7)==0)dust.push({x:x+Math.random()*10-5,y:y+60,l:0});
+dust.forEach(d=>{d.l++;d.y-=.1;ctx.fillStyle="rgba(255,255,240,"+.5*(1-d.l/24)+")";const s=2+Math.floor(d.l/8)*2;ctx.fillRect(Math.round(d.x),Math.round(d.y),s,s)});
+for(let i=dust.length;i--;)if(dust[i].l>24)dust.splice(i,1);
 (y<ay?[drawDuda,drawAmon]:[drawAmon,drawDuda]).forEach(f=>f());
 ctx.drawImage(fgc,0,0);
 bf.forEach(b=>{const bx=b.cx+Math.cos(t/55+b.ph)*b.r,by=b.cy+Math.sin(t/37+b.ph)*b.r*.5,fl=Math.sin(t/3+b.ph)>0?4:2;ctx.fillStyle=b.c;ctx.fillRect(Math.round(bx-fl),Math.round(by),fl,4);ctx.fillRect(Math.round(bx+1),Math.round(by),fl,4);ctx.fillStyle="#4a3b3b";ctx.fillRect(Math.round(bx),Math.round(by),2,4)});
 ctx.fillStyle="#f8bcd4";petals.forEach(p=>{p.y+=p.v;p.x+=.3+Math.sin(t/30+p.ph)*.4;if(p.y>404){p.y=-6;p.x=Math.random()*640}ctx.fillRect(Math.round(p.x),Math.round(p.y),4,3)});
+const tint=[null,"rgba(255,130,60,.22)","rgba(15,25,80,.5)"][tod];
+if(tint){ctx.fillStyle=tint;ctx.fillRect(0,0,640,400)}
+if(tod==2){ctx.globalCompositeOperation="lighter";ff.forEach(f=>{f.a+=.03;const gx=Math.round(f.x+Math.sin(t/60+f.p)*18),gy=Math.round(f.y+Math.cos(t/47+f.p)*12),al=.35+.35*Math.sin(f.a);ctx.fillStyle="rgba(255,240,140,"+al+")";ctx.fillRect(gx-4,gy-4,8,8);ctx.fillStyle="rgba(255,255,220,"+Math.min(1,al*1.5)+")";ctx.fillRect(gx-2,gy-2,4,4)});ctx.globalCompositeOperation="source-over"}
+if(kisses){ctx.font="bold 14px monospace";ctx.textBaseline="top";ctx.fillStyle="#4a3b3b";ctx.fillText("Beijos: "+kisses,15,13);ctx.fillStyle="#fffaf0";ctx.fillText("Beijos: "+kisses,14,12);heart(112,12,2)}
 if(mode=="kiss"){const ph=timer>200,L=ph?["Eu também te amo, Amon!","Também senti muitas saudades!"]:["Eu te amo, Duda!","Estou com saudades de você!"],n=Math.floor((ph?timer-200:timer)/3);
 ctx.fillStyle="#4a3b3b";ctx.fillRect(116,286,408,72);ctx.fillStyle="#fffaf0";ctx.fillRect(120,290,400,64);
 ctx.fillStyle="#e0485f";ctx.fillRect(120,268,76,22);
